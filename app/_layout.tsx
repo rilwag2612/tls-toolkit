@@ -1,24 +1,53 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { withLayoutContext } from "expo-router";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+import { Image } from "react-native";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+const { Navigator } = createBottomTabNavigator();
+export const BottomTabs = withLayoutContext(Navigator);
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+const tabs = [
+  { name: "index", label: "Home", icon: "home" },
+  { name: "safeguarding", label: "Safeguarding", icon: "shield" },
+  { 
+    name: "houses", 
+    label: "Houses", 
+    icon: "home", 
+    image: require("@/assets/images/housesIcon.png") // optional custom icon
+  },
+  { name: "badges", label: "Badges", icon: "ribbon" },
+];
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
+export default function Layout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <BottomTabs
+      screenOptions={({ route }) => {
+        const currentTab = tabs.find(tab => tab.name === route.name);
+        const iconName = currentTab?.icon ?? "help";
+        const iconImage = currentTab?.image;
+
+        return {
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => {
+            if (iconImage) {
+              return (
+                <Image
+                  source={iconImage}
+                  style={{
+                    width: size,
+                    height: size,
+                    resizeMode: "contain",
+                  }}
+                />
+              );
+            }
+            return <Ionicons name={iconName as any} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: "#007AFF",
+          tabBarInactiveTintColor: "gray",
+          title: currentTab ? currentTab.label : route.name,
+        };
+      }}
+    />
   );
 }
