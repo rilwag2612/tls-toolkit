@@ -20,7 +20,19 @@ export default function App() {
         />
         <Card
           title="Mr Fullerton"
-          description="Deputy Safeguarding Lead"
+          description="Safeguarding Officer"
+          image={require("@/assets/images/placeholder.png")}
+          style={styles.card}
+        />
+        <Card
+          title="Mr Diamond"
+          description="Safeguarding Officer"
+          image={require("@/assets/images/placeholder.png")}
+          style={styles.card}
+        />
+        <Card
+          title="Mrs Macro"
+          description="Safeguarding Officer"
           image={require("@/assets/images/placeholder.png")}
           style={styles.card}
         />
